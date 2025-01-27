@@ -56,7 +56,7 @@ function quickSortPlayers(arr: PlayerData[]): PlayerData[] {
 
 /**
  * The home page
- * 
+ *
  * @returns The home page component
  */
 export default function Home() {
@@ -71,12 +71,7 @@ export default function Home() {
   const updateLadderData = useCallback((player: PlayerData) => {
     setLadderData((prevData) => {
       return quickSortPlayers(
-        prevData.map((p) => {
-          if (p.id === player.id) {
-            return player;
-          }
-          return p;
-        })
+        prevData.filter((p) => p.id !== player.id).concat(player)
       );
     });
   }, []);
