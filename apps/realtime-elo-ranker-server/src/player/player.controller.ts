@@ -9,18 +9,18 @@ import {
   ConflictException,
   BadRequestException,
 } from '@nestjs/common';
-import { PlayersService } from './player.service';
+import { PlayerService } from './player.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 
 @Controller('api')
-export class PlayersController {
-  constructor(private readonly playersService: PlayersService) {}
+export class PlayerController {
+  constructor(private readonly playerService: PlayerService) {}
 
   @Post('player')
   async createPlayer(@Body() createPlayerDto: CreatePlayerDto) {
     try {
-      const player = await this.playersService.create(createPlayerDto);
+      const player = await this.playerService.create(createPlayerDto);
       return player;
     } catch (error) {
       if (error.message === 'Player already exists') {
@@ -39,21 +39,21 @@ export class PlayersController {
 
   @Get()
   findAll() {
-    return this.playersService.findAll();
+    return this.playerService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.playersService.findOne(+id);
+    return this.playerService.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePlayerDto: UpdatePlayerDto) {
-    return this.playersService.update(+id, updatePlayerDto);
+    return this.playerService.update(+id, updatePlayerDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.playersService.remove(+id);
+    return this.playerService.remove(+id);
   }
 }

@@ -12,30 +12,50 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlayersService = void 0;
+exports.PlayerService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const player_entity_1 = require("./entities/player.entity");
-let PlayersService = class PlayersService {
-    constructor(playersRepository) {
-        this.playersRepository = playersRepository;
+let PlayerService = class PlayerService {
+    constructor(playerRepository) {
+        this.playerRepository = playerRepository;
     }
     async create(createPlayerDto) {
         if (!createPlayerDto.id) {
             throw new common_1.BadRequestException('Invalid player ID');
         }
-        const existingPlayer = await this.playersRepository.findOne({
+        const existingPlayer = await this.playerRepository.findOne({
             where: { id: createPlayerDto.id },
         });
         if (existingPlayer) {
             throw new common_1.ConflictException('Player already exists');
         }
-        const player = this.playersRepository.create({
+        const baseRank = createPlayerDto.baseRank ?? (await this.getAverageRank());
+        const player = this.playerRepository.create({
             id: createPlayerDto.id,
-            rank: createPlayerDto.baseRank ?? 1000,
+            rank: baseRank,
         });
-        return await this.playersRepository.save(player);
+        return await this.playerRepository.save(player);
+    }
+    getPlayerById(id) {
+        return this.playerRepository.findOne({ where: { id: id } });
+    }
+    async updatePlayerRank(id, newRank) {
+        const player = await this.getPlayerById(id);
+        if (!player) {
+            throw new common_1.BadRequestException('Player not found');
+        }
+        player.rank = newRank;
+        return this.playerRepository.save(player);
+    }
+    async getAverageRank() {
+        const players = await this.playerRepository.find();
+        if (players.length === 0) {
+            return 1000;
+        }
+        const totalRank = players.reduce((sum, player) => sum + player.rank, 0);
+        return totalRank / players.length;
     }
     findAll() {
         return `This action returns all players`;
@@ -50,10 +70,10 @@ let PlayersService = class PlayersService {
         return `This action removes a #${id} player`;
     }
 };
-exports.PlayersService = PlayersService;
-exports.PlayersService = PlayersService = __decorate([
+exports.PlayerService = PlayerService;
+exports.PlayerService = PlayerService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(player_entity_1.Player)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
-], PlayersService);
+], PlayerService);
 //# sourceMappingURL=player.service.js.map

@@ -12,86 +12,80 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlayerController = void 0;
+exports.MatchController = void 0;
 const common_1 = require("@nestjs/common");
-const player_service_1 = require("./player.service");
-const create_player_dto_1 = require("./dto/create-player.dto");
-const update_player_dto_1 = require("./dto/update-player.dto");
-let PlayerController = class PlayerController {
-    constructor(playerService) {
-        this.playerService = playerService;
+const match_service_1 = require("./match.service");
+const publish_match_dto_1 = require("./dto/publish-match.dto");
+const update_match_dto_1 = require("./dto/update-match.dto");
+let MatchController = class MatchController {
+    constructor(matchService) {
+        this.matchService = matchService;
     }
-    async createPlayer(createPlayerDto) {
+    publish(publishMatchDto) {
         try {
-            const player = await this.playerService.create(createPlayerDto);
-            return player;
+            const match = this.matchService.publishResults(publishMatchDto);
+            return match;
         }
         catch (error) {
-            if (error.message === 'Player already exists') {
-                throw new common_1.ConflictException({
-                    code: 409,
-                    message: 'Le joueur existe déjà',
-                });
-            }
-            else if (error.message === 'Invalid player ID') {
+            if (error.message === 'One or both players not found') {
                 throw new common_1.BadRequestException({
-                    code: 400,
-                    message: "L'identifiant du joueur n'est pas valide",
+                    code: 422,
+                    message: "Un des joueur n'existe pas",
                 });
             }
         }
     }
     findAll() {
-        return this.playerService.findAll();
+        return this.matchService.findAll();
     }
     findOne(id) {
-        return this.playerService.findOne(+id);
+        return this.matchService.findOne(+id);
     }
-    update(id, updatePlayerDto) {
-        return this.playerService.update(+id, updatePlayerDto);
+    update(id, updateMatchDto) {
+        return this.matchService.update(+id, updateMatchDto);
     }
     remove(id) {
-        return this.playerService.remove(+id);
+        return this.matchService.remove(+id);
     }
 };
-exports.PlayerController = PlayerController;
+exports.MatchController = MatchController;
 __decorate([
-    (0, common_1.Post)('player'),
+    (0, common_1.Post)('match'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_player_dto_1.CreatePlayerDto]),
-    __metadata("design:returntype", Promise)
-], PlayerController.prototype, "createPlayer", null);
+    __metadata("design:paramtypes", [publish_match_dto_1.PublishMatchDto]),
+    __metadata("design:returntype", void 0)
+], MatchController.prototype, "publish", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], PlayerController.prototype, "findAll", null);
+], MatchController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], PlayerController.prototype, "findOne", null);
+], MatchController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_player_dto_1.UpdatePlayerDto]),
+    __metadata("design:paramtypes", [String, update_match_dto_1.UpdateMatchDto]),
     __metadata("design:returntype", void 0)
-], PlayerController.prototype, "update", null);
+], MatchController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], PlayerController.prototype, "remove", null);
-exports.PlayerController = PlayerController = __decorate([
+], MatchController.prototype, "remove", null);
+exports.MatchController = MatchController = __decorate([
     (0, common_1.Controller)('api'),
-    __metadata("design:paramtypes", [player_service_1.PlayerService])
-], PlayerController);
-//# sourceMappingURL=player.controller.js.map
+    __metadata("design:paramtypes", [match_service_1.MatchService])
+], MatchController);
+//# sourceMappingURL=match.controller.js.map

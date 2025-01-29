@@ -6,18 +6,29 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { MatchService } from './match.service';
-import { CreateMatchDto } from './dto/create-match.dto';
+import { PublishMatchDto } from './dto/publish-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
 
-@Controller('match')
+@Controller('api')
 export class MatchController {
   constructor(private readonly matchService: MatchService) {}
 
-  @Post()
-  create(@Body() createMatchDto: CreateMatchDto) {
-    return this.matchService.create(createMatchDto);
+  @Post('match')
+  publish(@Body() publishMatchDto: PublishMatchDto) {
+    try {
+      const match = this.matchService.publishResults(publishMatchDto);
+      return match;
+    } catch (error) {
+      if (error.message === 'One or both players not found') {
+        throw new BadRequestException({
+          code: 422,
+          message: "Un des joueur n'existe pas",
+        });
+      }
+    }
   }
 
   @Get()
