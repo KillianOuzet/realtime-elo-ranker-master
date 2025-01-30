@@ -25,13 +25,13 @@ let PlayerService = class PlayerService {
     }
     async create(createPlayerDto) {
         if (!createPlayerDto.id) {
-            throw new common_1.BadRequestException('Invalid player ID');
+            throw new common_1.BadRequestException("L'identifiant du joueur n'est pas valide");
         }
         const existingPlayer = await this.playerRepository.findOne({
             where: { id: createPlayerDto.id },
         });
         if (existingPlayer) {
-            throw new common_1.ConflictException('Player already exists');
+            throw new common_1.ConflictException('Le joueur existe déjà');
         }
         const baseRank = createPlayerDto.baseRank ?? (await this.getAverageRank());
         const player = this.playerRepository.create({
@@ -56,7 +56,7 @@ let PlayerService = class PlayerService {
     async getAverageRank() {
         const players = await this.playerRepository.find();
         if (players.length === 0) {
-            return 1000;
+            return 100;
         }
         const totalRank = players.reduce((sum, player) => sum + player.rank, 0);
         return Math.round(totalRank / players.length);

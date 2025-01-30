@@ -27,16 +27,16 @@ let PlayerController = class PlayerController {
             return player;
         }
         catch (error) {
-            if (error.message === 'Player already exists') {
+            if (error instanceof common_1.ConflictException) {
                 throw new common_1.ConflictException({
                     code: 409,
-                    message: 'Le joueur existe déjà',
+                    message: error.message,
                 });
             }
-            else if (error.message === 'Invalid player ID') {
+            else if (error instanceof common_1.BadRequestException) {
                 throw new common_1.BadRequestException({
                     code: 400,
-                    message: "L'identifiant du joueur n'est pas valide",
+                    message: error.message,
                 });
             }
         }

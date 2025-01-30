@@ -23,15 +23,15 @@ export class PlayerController {
       const player = await this.playerService.create(createPlayerDto);
       return player;
     } catch (error) {
-      if (error.message === 'Player already exists') {
+      if (error instanceof ConflictException) {
         throw new ConflictException({
           code: 409,
-          message: 'Le joueur existe déjà',
+          message: error.message,
         });
-      } else if (error.message === 'Invalid player ID') {
+      } else if (error instanceof BadRequestException) {
         throw new BadRequestException({
           code: 400,
-          message: "L'identifiant du joueur n'est pas valide",
+          message: error.message,
         });
       }
     }
