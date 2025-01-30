@@ -1,7 +1,6 @@
 import { PlayerService } from './../player/player.service';
 import { Injectable } from '@nestjs/common';
 import { PublishMatchDto } from './dto/publish-match.dto';
-import { UpdateMatchDto } from './dto/update-match.dto';
 
 @Injectable()
 export class MatchService {
@@ -68,21 +67,5 @@ export class MatchService {
     }
 
     return { newWinnerRank, newLoserRank };
-  }
-
-  findAll() {
-    return `This action returns all match`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} match`;
-  }
-
-  update(id: number, updateMatchDto: UpdateMatchDto) {
-    return `This action updates a #${id} match`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} match`;
   }
 }

@@ -47,18 +47,6 @@ let MatchService = class MatchService {
         }
         return { newWinnerRank, newLoserRank };
     }
-    findAll() {
-        return `This action returns all match`;
-    }
-    findOne(id) {
-        return `This action returns a #${id} match`;
-    }
-    update(id, updateMatchDto) {
-        return `This action updates a #${id} match`;
-    }
-    remove(id) {
-        return `This action removes a #${id} match`;
-    }
 };
 exports.MatchService = MatchService;
 exports.MatchService = MatchService = __decorate([

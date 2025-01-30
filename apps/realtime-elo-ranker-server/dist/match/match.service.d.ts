@@ -1,6 +1,5 @@
 import { PlayerService } from './../player/player.service';
 import { PublishMatchDto } from './dto/publish-match.dto';
-import { UpdateMatchDto } from './dto/update-match.dto';
 export declare class MatchService {
     private playerService;
     constructor(playerService: PlayerService);
@@ -16,8 +15,4 @@ export declare class MatchService {
         draw: boolean | undefined;
     }>;
     private calculateElo;
-    findAll(): string;
-    findOne(id: number): string;
-    update(id: number, updateMatchDto: UpdateMatchDto): string;
-    remove(id: number): string;
 }

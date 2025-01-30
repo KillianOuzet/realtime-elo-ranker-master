@@ -14,6 +14,8 @@ const player_module_1 = require("./player/player.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const player_entity_1 = require("./player/entities/player.entity");
 const match_module_1 = require("./match/match.module");
+const ranking_module_1 = require("./ranking/ranking.module");
+const event_emitter_module_1 = require("@nestjs/event-emitter/dist/event-emitter.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -22,12 +24,14 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             player_module_1.PlayerModule,
             match_module_1.MatchModule,
+            ranking_module_1.RankingModule,
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'sqlite',
                 database: 'eloranker.sqlite',
                 entities: [player_entity_1.Player],
                 synchronize: true,
             }),
+            event_emitter_module_1.EventEmitterModule.forRoot(),
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

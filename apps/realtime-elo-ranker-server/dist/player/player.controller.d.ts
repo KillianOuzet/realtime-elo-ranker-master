@@ -5,7 +5,7 @@ export declare class PlayerController {
     private readonly playerService;
     constructor(playerService: PlayerService);
     createPlayer(createPlayerDto: CreatePlayerDto): Promise<import("./entities/player.entity").Player | undefined>;
-    findAll(): string;
+    findAll(): Promise<import("./entities/player.entity").Player[]>;
     findOne(id: string): string;
     update(id: string, updatePlayerDto: UpdatePlayerDto): string;
     remove(id: string): string;

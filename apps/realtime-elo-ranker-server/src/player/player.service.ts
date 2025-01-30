@@ -2,18 +2,21 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Player } from './entities/player.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class PlayerService {
   constructor(
     @InjectRepository(Player)
     private playerRepository: Repository<Player>,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async create(createPlayerDto: CreatePlayerDto): Promise<Player> {
@@ -31,6 +34,7 @@ export class PlayerService {
       id: createPlayerDto.id,
       rank: baseRank,
     });
+    this.eventEmitter.emit('player.created', player);
     return await this.playerRepository.save(player);
   }
 
@@ -44,6 +48,7 @@ export class PlayerService {
       throw new BadRequestException('Player not found');
     }
     player.rank = newRank;
+    this.eventEmitter.emit('player.updated', player);
     return this.playerRepository.save(player);
   }
 
@@ -53,11 +58,15 @@ export class PlayerService {
       return 1000;
     }
     const totalRank = players.reduce((sum, player) => sum + player.rank, 0);
-    return totalRank / players.length;
+    return Math.round(totalRank / players.length);
   }
 
-  findAll() {
-    return `This action returns all players`;
+  async findAll() {
+    const players = await this.playerRepository.find();
+    if (players.length === 0) {
+      throw new NotFoundException('No players exist');
+    }
+    return players;
   }
 
   findOne(id: number) {

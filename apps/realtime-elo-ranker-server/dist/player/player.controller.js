@@ -56,7 +56,7 @@ let PlayerController = class PlayerController {
 };
 exports.PlayerController = PlayerController;
 __decorate([
-    (0, common_1.Post)('player'),
+    (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_player_dto_1.CreatePlayerDto]),
@@ -91,7 +91,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PlayerController.prototype, "remove", null);
 exports.PlayerController = PlayerController = __decorate([
-    (0, common_1.Controller)('api'),
+    (0, common_1.Controller)('api/player'),
     __metadata("design:paramtypes", [player_service_1.PlayerService])
 ], PlayerController);
 //# sourceMappingURL=player.controller.js.map

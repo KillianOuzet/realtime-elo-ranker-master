@@ -17,9 +17,11 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const player_entity_1 = require("./entities/player.entity");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let PlayerService = class PlayerService {
-    constructor(playerRepository) {
+    constructor(playerRepository, eventEmitter) {
         this.playerRepository = playerRepository;
+        this.eventEmitter = eventEmitter;
     }
     async create(createPlayerDto) {
         if (!createPlayerDto.id) {
@@ -36,6 +38,7 @@ let PlayerService = class PlayerService {
             id: createPlayerDto.id,
             rank: baseRank,
         });
+        this.eventEmitter.emit('player.created', player);
         return await this.playerRepository.save(player);
     }
     getPlayerById(id) {
@@ -47,6 +50,7 @@ let PlayerService = class PlayerService {
             throw new common_1.BadRequestException('Player not found');
         }
         player.rank = newRank;
+        this.eventEmitter.emit('player.updated', player);
         return this.playerRepository.save(player);
     }
     async getAverageRank() {
@@ -55,10 +59,14 @@ let PlayerService = class PlayerService {
             return 1000;
         }
         const totalRank = players.reduce((sum, player) => sum + player.rank, 0);
-        return totalRank / players.length;
+        return Math.round(totalRank / players.length);
     }
-    findAll() {
-        return `This action returns all players`;
+    async findAll() {
+        const players = await this.playerRepository.find();
+        if (players.length === 0) {
+            throw new common_1.NotFoundException('No players exist');
+        }
+        return players;
     }
     findOne(id) {
         return `This action returns a #${id} player`;
@@ -74,6 +82,7 @@ exports.PlayerService = PlayerService;
 exports.PlayerService = PlayerService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(player_entity_1.Player)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        event_emitter_1.EventEmitter2])
 ], PlayerService);
 //# sourceMappingURL=player.service.js.map

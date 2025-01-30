@@ -1,22 +1,12 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  BadRequestException,
-} from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
 import { MatchService } from './match.service';
 import { PublishMatchDto } from './dto/publish-match.dto';
-import { UpdateMatchDto } from './dto/update-match.dto';
 
-@Controller('api')
+@Controller('api/match')
 export class MatchController {
   constructor(private readonly matchService: MatchService) {}
 
-  @Post('match')
+  @Post()
   publish(@Body() publishMatchDto: PublishMatchDto) {
     try {
       const match = this.matchService.publishResults(publishMatchDto);
@@ -29,25 +19,5 @@ export class MatchController {
         });
       }
     }
-  }
-
-  @Get()
-  findAll() {
-    return this.matchService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.matchService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMatchDto: UpdateMatchDto) {
-    return this.matchService.update(+id, updateMatchDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.matchService.remove(+id);
   }
 }

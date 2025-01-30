@@ -13,11 +13,11 @@ import { PlayerService } from './player.service';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 
-@Controller('api')
+@Controller('api/player')
 export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
 
-  @Post('player')
+  @Post()
   async createPlayer(@Body() createPlayerDto: CreatePlayerDto) {
     try {
       const player = await this.playerService.create(createPlayerDto);
