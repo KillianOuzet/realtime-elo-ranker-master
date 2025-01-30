@@ -1,5 +1,5 @@
 import { PlayerService } from './../player/player.service';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { PublishMatchDto } from './dto/publish-match.dto';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class MatchService {
     const loser = await this.playerService.getPlayerById(loserId);
 
     if (!winner || !loser) {
-      throw new Error('One or both players not found');
+      throw new UnprocessableEntityException("Un des joueurs n'existe pas");
     }
 
     const { newWinnerRank, newLoserRank } = this.calculateElo(

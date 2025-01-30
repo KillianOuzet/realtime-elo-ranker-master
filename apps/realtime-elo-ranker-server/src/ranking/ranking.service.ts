@@ -10,7 +10,9 @@ export class RankingService {
       return this.playerService.findAll();
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new NotFoundException('No players exist');
+        throw new NotFoundException(
+          "Le classement n'est pas disponible car aucun joueur n'existe",
+        );
       }
       throw error;
     }

@@ -1,4 +1,9 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { MatchService } from './match.service';
 import { PublishMatchDto } from './dto/publish-match.dto';
 
@@ -12,8 +17,8 @@ export class MatchController {
       const match = this.matchService.publishResults(publishMatchDto);
       return match;
     } catch (error) {
-      if (error.message === 'One or both players not found') {
-        throw new BadRequestException({
+      if (error instanceof UnprocessableEntityException) {
+        throw new UnprocessableEntityException({
           code: 422,
           message: "Un des joueur n'existe pas",
         });

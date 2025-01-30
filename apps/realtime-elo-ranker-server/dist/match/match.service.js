@@ -21,7 +21,7 @@ let MatchService = class MatchService {
         const winner = await this.playerService.getPlayerById(winnerId);
         const loser = await this.playerService.getPlayerById(loserId);
         if (!winner || !loser) {
-            throw new Error('One or both players not found');
+            throw new common_1.UnprocessableEntityException("Un des joueurs n'existe pas");
         }
         const { newWinnerRank, newLoserRank } = this.calculateElo(winner.rank, loser.rank, draw);
         const updatedWinner = await this.playerService.updatePlayerRank(winner.id, newWinnerRank);

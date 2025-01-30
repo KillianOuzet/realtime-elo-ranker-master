@@ -26,8 +26,8 @@ let MatchController = class MatchController {
             return match;
         }
         catch (error) {
-            if (error.message === 'One or both players not found') {
-                throw new common_1.BadRequestException({
+            if (error instanceof common_1.UnprocessableEntityException) {
+                throw new common_1.UnprocessableEntityException({
                     code: 422,
                     message: "Un des joueur n'existe pas",
                 });

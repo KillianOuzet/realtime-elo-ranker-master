@@ -64,7 +64,9 @@ export class PlayerService {
   async findAll() {
     const players = await this.playerRepository.find();
     if (players.length === 0) {
-      throw new NotFoundException('No players exist');
+      throw new NotFoundException(
+        "Le classement n'est pas disponible car aucun joueur n'existe",
+      );
     }
     return players;
   }
