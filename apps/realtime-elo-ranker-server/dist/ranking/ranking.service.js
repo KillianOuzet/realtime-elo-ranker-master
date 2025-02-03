@@ -10,30 +10,38 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RankingService = void 0;
-const player_service_1 = require("./../player/player.service");
 const common_1 = require("@nestjs/common");
+const event_emitter_1 = require("@nestjs/event-emitter");
 let RankingService = class RankingService {
-    constructor(playerService) {
-        this.playerService = playerService;
+    constructor(eventEmitter) {
+        this.eventEmitter = eventEmitter;
     }
-    findAll(callback) {
-        try {
-            const result = this.playerService.findAll();
-            callback(null, result);
-        }
-        catch (error) {
-            if (error instanceof common_1.NotFoundException) {
-                callback(new common_1.NotFoundException("Le classement n'est pas disponible car aucun joueur n'existe"));
-            }
-            else {
-                callback(error);
-            }
-        }
+    initLadder(players) {
+        this.ladder = players
+            .map((player) => ({
+            id: player.id,
+            rank: player.rank,
+        }))
+            .sort((a, b) => b.rank - a.rank);
+        console.log('initLadder', this.ladder);
+    }
+    getLadder() {
+        return this.ladder;
+    }
+    addPlayer(createRankingDto) {
+        this.ladder.push(createRankingDto);
+        this.ladder.sort((a, b) => b.rank - a.rank);
+        this.eventEmitter.emit('player.created', createRankingDto);
+    }
+    UpdatePlayerRank(updateRankingDto) {
+        this.ladder = this.ladder.map((p) => p.id === updateRankingDto.id ? { ...p, rank: updateRankingDto.rank } : p);
+        this.ladder.sort((a, b) => b.rank - a.rank);
+        this.eventEmitter.emit('player.updated', updateRankingDto);
     }
 };
 exports.RankingService = RankingService;
 exports.RankingService = RankingService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [player_service_1.PlayerService])
+    __metadata("design:paramtypes", [event_emitter_1.EventEmitter2])
 ], RankingService);
 //# sourceMappingURL=ranking.service.js.map

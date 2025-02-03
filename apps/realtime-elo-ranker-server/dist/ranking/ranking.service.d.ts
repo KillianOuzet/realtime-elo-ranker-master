@@ -1,6 +1,18 @@
-import { PlayerService } from './../player/player.service';
+import { CreateRankingDto } from './dto/create-ranking.dto';
+import { UpdateRankingDto } from './dto/update-ranking.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 export declare class RankingService {
-    private playerService;
-    constructor(playerService: PlayerService);
-    findAll(callback: (error: Error | null, result?: any) => void): void;
+    private eventEmitter;
+    constructor(eventEmitter: EventEmitter2);
+    private ladder;
+    initLadder(players: {
+        id: string;
+        rank: number;
+    }[]): void;
+    getLadder(): {
+        id: string;
+        rank: number;
+    }[];
+    addPlayer(createRankingDto: CreateRankingDto): void;
+    UpdatePlayerRank(updateRankingDto: UpdateRankingDto): void;
 }

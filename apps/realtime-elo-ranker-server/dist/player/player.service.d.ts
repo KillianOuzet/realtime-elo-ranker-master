@@ -2,11 +2,12 @@ import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { Repository } from 'typeorm';
 import { Player } from './entities/player.entity';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { RankingService } from 'src/ranking/ranking.service';
 export declare class PlayerService {
     private playerRepository;
-    private eventEmitter;
-    constructor(playerRepository: Repository<Player>, eventEmitter: EventEmitter2);
+    private rankingService;
+    constructor(playerRepository: Repository<Player>, rankingService: RankingService);
+    onModuleInit(): Promise<void>;
     create(createPlayerDto: CreatePlayerDto): Promise<Player>;
     getPlayerById(id: string): Promise<Player | null>;
     updatePlayerRank(id: string, newRank: number): Promise<Player>;

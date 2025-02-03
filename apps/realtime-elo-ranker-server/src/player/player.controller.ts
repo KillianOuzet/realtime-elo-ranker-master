@@ -18,9 +18,9 @@ export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
 
   @Post()
-  async createPlayer(@Body() createPlayerDto: CreatePlayerDto) {
+  createPlayer(@Body() createPlayerDto: CreatePlayerDto) {
     try {
-      const player = await this.playerService.create(createPlayerDto);
+      const player = this.playerService.create(createPlayerDto);
       return player;
     } catch (error) {
       if (error instanceof ConflictException) {
@@ -44,7 +44,7 @@ export class PlayerController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.playerService.findOne(+id);
+    return this.playerService.getPlayerById(id);
   }
 
   @Patch(':id')

@@ -1,5 +1,5 @@
 import { Player } from './../player/entities/player.entity';
-import { Controller, Get, NotFoundException, Sse } from '@nestjs/common';
+import { Controller, Get, Sse } from '@nestjs/common';
 import { RankingService } from './ranking.service';
 import { fromEvent, map, merge, Observable } from 'rxjs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -48,21 +48,6 @@ export class RankingController {
 
   @Get()
   findAll() {
-    return new Promise((resolve, reject) => {
-      this.rankingService.findAll((error, result) => {
-        if (error) {
-          if (error instanceof NotFoundException) {
-            resolve({
-              code: 404,
-              message: error.message,
-            });
-          } else {
-            reject(error);
-          }
-        } else {
-          resolve(result);
-        }
-      });
-    });
+    return this.rankingService.getLadder();
   }
 }

@@ -17,11 +17,20 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const player_entity_1 = require("./entities/player.entity");
-const event_emitter_1 = require("@nestjs/event-emitter");
+const ranking_service_1 = require("../ranking/ranking.service");
 let PlayerService = class PlayerService {
-    constructor(playerRepository, eventEmitter) {
+    constructor(playerRepository, rankingService) {
         this.playerRepository = playerRepository;
-        this.eventEmitter = eventEmitter;
+        this.rankingService = rankingService;
+    }
+    async onModuleInit() {
+        try {
+            const players = await this.findAll();
+            this.rankingService.initLadder(players);
+        }
+        catch (error) {
+            throw new common_1.NotFoundException('Impossible de récupérer les classements des joueurs');
+        }
     }
     async create(createPlayerDto) {
         if (!createPlayerDto.id) {
@@ -38,7 +47,7 @@ let PlayerService = class PlayerService {
             id: createPlayerDto.id,
             rank: baseRank,
         });
-        this.eventEmitter.emit('player.created', player);
+        this.rankingService.addPlayer(player);
         return await this.playerRepository.save(player);
     }
     getPlayerById(id) {
@@ -50,7 +59,7 @@ let PlayerService = class PlayerService {
             throw new common_1.BadRequestException('Player not found');
         }
         player.rank = newRank;
-        this.eventEmitter.emit('player.updated', player);
+        this.rankingService.UpdatePlayerRank(player);
         return this.playerRepository.save(player);
     }
     async getAverageRank() {
@@ -83,6 +92,6 @@ exports.PlayerService = PlayerService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(player_entity_1.Player)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        event_emitter_1.EventEmitter2])
+        ranking_service_1.RankingService])
 ], PlayerService);
 //# sourceMappingURL=player.service.js.map

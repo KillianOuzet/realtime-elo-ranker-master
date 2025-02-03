@@ -21,9 +21,9 @@ let PlayerController = class PlayerController {
     constructor(playerService) {
         this.playerService = playerService;
     }
-    async createPlayer(createPlayerDto) {
+    createPlayer(createPlayerDto) {
         try {
-            const player = await this.playerService.create(createPlayerDto);
+            const player = this.playerService.create(createPlayerDto);
             return player;
         }
         catch (error) {
@@ -45,7 +45,7 @@ let PlayerController = class PlayerController {
         return this.playerService.findAll();
     }
     findOne(id) {
-        return this.playerService.findOne(+id);
+        return this.playerService.getPlayerById(id);
     }
     update(id, updatePlayerDto) {
         return this.playerService.update(+id, updatePlayerDto);
@@ -60,7 +60,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_player_dto_1.CreatePlayerDto]),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", void 0)
 ], PlayerController.prototype, "createPlayer", null);
 __decorate([
     (0, common_1.Get)(),

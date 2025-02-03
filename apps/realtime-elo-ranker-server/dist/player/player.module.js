@@ -12,12 +12,13 @@ const player_service_1 = require("./player.service");
 const player_controller_1 = require("./player.controller");
 const player_entity_1 = require("./entities/player.entity");
 const typeorm_1 = require("@nestjs/typeorm");
+const ranking_module_1 = require("../ranking/ranking.module");
 let PlayerModule = class PlayerModule {
 };
 exports.PlayerModule = PlayerModule;
 exports.PlayerModule = PlayerModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([player_entity_1.Player])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([player_entity_1.Player]), ranking_module_1.RankingModule],
         controllers: [player_controller_1.PlayerController],
         providers: [player_service_1.PlayerService],
         exports: [player_service_1.PlayerService],

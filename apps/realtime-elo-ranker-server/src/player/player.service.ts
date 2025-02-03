@@ -9,15 +9,26 @@ import { UpdatePlayerDto } from './dto/update-player.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Player } from './entities/player.entity';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { RankingService } from 'src/ranking/ranking.service';
 
 @Injectable()
 export class PlayerService {
   constructor(
     @InjectRepository(Player)
     private playerRepository: Repository<Player>,
-    private eventEmitter: EventEmitter2,
+    private rankingService: RankingService,
   ) {}
+
+  async onModuleInit() {
+    try {
+      const players = await this.findAll();
+      this.rankingService.initLadder(players);
+    } catch (error) {
+      throw new NotFoundException(
+        'Impossible de récupérer les classements des joueurs',
+      );
+    }
+  }
 
   async create(createPlayerDto: CreatePlayerDto): Promise<Player> {
     if (!createPlayerDto.id) {
@@ -34,7 +45,7 @@ export class PlayerService {
       id: createPlayerDto.id,
       rank: baseRank,
     });
-    this.eventEmitter.emit('player.created', player);
+    this.rankingService.addPlayer(player);
     return await this.playerRepository.save(player);
   }
 
@@ -48,7 +59,7 @@ export class PlayerService {
       throw new BadRequestException('Player not found');
     }
     player.rank = newRank;
-    this.eventEmitter.emit('player.updated', player);
+    this.rankingService.UpdatePlayerRank(player);
     return this.playerRepository.save(player);
   }
 

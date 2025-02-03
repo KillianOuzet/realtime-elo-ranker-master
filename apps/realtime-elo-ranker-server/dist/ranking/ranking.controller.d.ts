@@ -6,5 +6,8 @@ export declare class RankingController {
     private eventEmitter;
     constructor(rankingService: RankingService, eventEmitter: EventEmitter2);
     sse(): Observable<MessageEvent>;
-    findAll(): Promise<unknown>;
+    findAll(): {
+        id: string;
+        rank: number;
+    }[];
 }
