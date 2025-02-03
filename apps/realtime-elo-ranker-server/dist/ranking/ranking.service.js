@@ -16,15 +16,18 @@ let RankingService = class RankingService {
     constructor(playerService) {
         this.playerService = playerService;
     }
-    findAll() {
+    findAll(callback) {
         try {
-            return this.playerService.findAll();
+            const result = this.playerService.findAll();
+            callback(null, result);
         }
         catch (error) {
             if (error instanceof common_1.NotFoundException) {
-                throw new common_1.NotFoundException('No players exist');
+                callback(new common_1.NotFoundException("Le classement n'est pas disponible car aucun joueur n'existe"));
             }
-            throw error;
+            else {
+                callback(error);
+            }
         }
     }
 };

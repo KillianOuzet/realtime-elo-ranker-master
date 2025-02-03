@@ -5,16 +5,20 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 export class RankingService {
   constructor(private playerService: PlayerService) {}
 
-  findAll() {
+  findAll(callback: (error: Error | null, result?: any) => void) {
     try {
-      return this.playerService.findAll();
+      const result = this.playerService.findAll();
+      callback(null, result);
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new NotFoundException(
-          "Le classement n'est pas disponible car aucun joueur n'existe",
+        callback(
+          new NotFoundException(
+            "Le classement n'est pas disponible car aucun joueur n'existe",
+          ),
         );
+      } else {
+        callback(error);
       }
-      throw error;
     }
   }
 }

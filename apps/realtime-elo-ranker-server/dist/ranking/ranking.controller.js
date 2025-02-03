@@ -41,7 +41,24 @@ let RankingController = class RankingController {
         return (0, rxjs_1.merge)(playerCreated, playerUpdated);
     }
     findAll() {
-        return this.rankingService.findAll();
+        return new Promise((resolve, reject) => {
+            this.rankingService.findAll((error, result) => {
+                if (error) {
+                    if (error instanceof common_1.NotFoundException) {
+                        resolve({
+                            code: 404,
+                            message: error.message,
+                        });
+                    }
+                    else {
+                        reject(error);
+                    }
+                }
+                else {
+                    resolve(result);
+                }
+            });
+        });
     }
 };
 exports.RankingController = RankingController;

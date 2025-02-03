@@ -48,15 +48,21 @@ export class RankingController {
 
   @Get()
   findAll() {
-    try {
-      return this.rankingService.findAll();
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new NotFoundException({
-          code: 404,
-          message: error.message,
-        });
-      }
-    }
+    return new Promise((resolve, reject) => {
+      this.rankingService.findAll((error, result) => {
+        if (error) {
+          if (error instanceof NotFoundException) {
+            resolve({
+              code: 404,
+              message: error.message,
+            });
+          } else {
+            reject(error);
+          }
+        } else {
+          resolve(result);
+        }
+      });
+    });
   }
 }
