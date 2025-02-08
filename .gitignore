@@ -1,2 +1,3 @@
 node_modules
 apps/*/dist/*.js
+apps/realtime-elo-ranker-server/coverage/*
