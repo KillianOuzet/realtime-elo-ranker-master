@@ -1,5 +1,5 @@
 export class PublishMatchDto {
-  readonly winner: string;
-  readonly loser: string;
-  readonly draw?: boolean;
+  winner: string;
+  loser: string;
+  draw?: boolean;
 }
