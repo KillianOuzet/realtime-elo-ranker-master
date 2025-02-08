@@ -7,16 +7,16 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 export class RankingService {
   constructor(private eventEmitter: EventEmitter2) {}
 
-  private ladder: { id: string; rank: number }[];
+  private ladder: CreateRankingDto[] = [];
 
-  initLadder(players: { id: string; rank: number }[]) {
+  initLadder(players: CreateRankingDto[]): CreateRankingDto[] {
     this.ladder = players
       .map((player) => ({
         id: player.id,
         rank: player.rank,
       }))
       .sort((a, b) => b.rank - a.rank);
-    console.log('initLadder', this.ladder);
+    return this.ladder;
   }
 
   getLadder() {

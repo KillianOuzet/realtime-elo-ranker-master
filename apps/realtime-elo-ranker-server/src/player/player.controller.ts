@@ -46,14 +46,4 @@ export class PlayerController {
   findOne(@Param('id') id: string) {
     return this.playerService.getPlayerById(id);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePlayerDto: UpdatePlayerDto) {
-    return this.playerService.update(+id, updatePlayerDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.playerService.remove(+id);
-  }
 }

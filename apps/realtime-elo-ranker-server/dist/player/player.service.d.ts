@@ -2,7 +2,7 @@ import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { Repository } from 'typeorm';
 import { Player } from './entities/player.entity';
-import { RankingService } from 'src/ranking/ranking.service';
+import { RankingService } from '../ranking/ranking.service';
 export declare class PlayerService {
     private playerRepository;
     private rankingService;

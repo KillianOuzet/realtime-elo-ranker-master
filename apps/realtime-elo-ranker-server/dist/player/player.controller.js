@@ -16,7 +16,6 @@ exports.PlayerController = void 0;
 const common_1 = require("@nestjs/common");
 const player_service_1 = require("./player.service");
 const create_player_dto_1 = require("./dto/create-player.dto");
-const update_player_dto_1 = require("./dto/update-player.dto");
 let PlayerController = class PlayerController {
     constructor(playerService) {
         this.playerService = playerService;
@@ -47,12 +46,6 @@ let PlayerController = class PlayerController {
     findOne(id) {
         return this.playerService.getPlayerById(id);
     }
-    update(id, updatePlayerDto) {
-        return this.playerService.update(+id, updatePlayerDto);
-    }
-    remove(id) {
-        return this.playerService.remove(+id);
-    }
 };
 exports.PlayerController = PlayerController;
 __decorate([
@@ -75,21 +68,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PlayerController.prototype, "findOne", null);
-__decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_player_dto_1.UpdatePlayerDto]),
-    __metadata("design:returntype", void 0)
-], PlayerController.prototype, "update", null);
-__decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], PlayerController.prototype, "remove", null);
 exports.PlayerController = PlayerController = __decorate([
     (0, common_1.Controller)('api/player'),
     __metadata("design:paramtypes", [player_service_1.PlayerService])

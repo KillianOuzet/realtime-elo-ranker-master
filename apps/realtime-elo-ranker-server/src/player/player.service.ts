@@ -9,7 +9,7 @@ import { UpdatePlayerDto } from './dto/update-player.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Player } from './entities/player.entity';
-import { RankingService } from 'src/ranking/ranking.service';
+import { RankingService } from '../ranking/ranking.service'; // Utilisez un chemin relatif
 
 @Injectable()
 export class PlayerService {
@@ -49,8 +49,12 @@ export class PlayerService {
     return await this.playerRepository.save(player);
   }
 
-  getPlayerById(id: string): Promise<Player | null> {
-    return this.playerRepository.findOne({ where: { id: id } });
+  async getPlayerById(id: string): Promise<Player | null> {
+    const player = await this.playerRepository.findOne({ where: { id: id } });
+    if (!player) {
+      throw new BadRequestException('Player not found');
+    }
+    return player;
   }
 
   async updatePlayerRank(id: string, newRank: number): Promise<Player> {
