@@ -24,10 +24,26 @@ const genericPlayers: Player[] = [
 async function getPlayers(): Promise<Player[]> {
   try {
     const response = await axios.get(PLAYER_URL);
+    if (response.data.length === 0) {
+      await createGenericPlayers();
+      return genericPlayers;
+    }
     return response.data;
   } catch (error) {
     console.error('Error fetching players:', error.message);
+    await createGenericPlayers();
     return genericPlayers;
+  }
+}
+
+async function createGenericPlayers() {
+  try {
+    for (const player of genericPlayers) {
+      await axios.post(PLAYER_URL, player);
+    }
+    console.log('Generic players created');
+  } catch (error) {
+    console.error('Error creating generic players:', error.message);
   }
 }
 
