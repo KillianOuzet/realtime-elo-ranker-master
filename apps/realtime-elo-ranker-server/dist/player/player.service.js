@@ -29,7 +29,7 @@ let PlayerService = class PlayerService {
             this.rankingService.initLadder(players);
         }
         catch (error) {
-            throw new common_1.NotFoundException('Impossible de récupérer les classements des joueurs');
+            throw new common_1.NotFoundException(error.message);
         }
     }
     async create(createPlayerDto) {
@@ -50,8 +50,12 @@ let PlayerService = class PlayerService {
         this.rankingService.addPlayer(player);
         return await this.playerRepository.save(player);
     }
-    getPlayerById(id) {
-        return this.playerRepository.findOne({ where: { id: id } });
+    async getPlayerById(id) {
+        const player = await this.playerRepository.findOne({ where: { id: id } });
+        if (!player) {
+            throw new common_1.BadRequestException('Player not found');
+        }
+        return player;
     }
     async updatePlayerRank(id, newRank) {
         const player = await this.getPlayerById(id);
@@ -73,18 +77,9 @@ let PlayerService = class PlayerService {
     async findAll() {
         const players = await this.playerRepository.find();
         if (players.length === 0) {
-            throw new common_1.NotFoundException("Le classement n'est pas disponible car aucun joueur n'existe");
+            return [];
         }
         return players;
-    }
-    findOne(id) {
-        return `This action returns a #${id} player`;
-    }
-    update(id, updatePlayerDto) {
-        return `This action updates a #${id} player`;
-    }
-    remove(id) {
-        return `This action removes a #${id} player`;
     }
 };
 exports.PlayerService = PlayerService;

@@ -5,7 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreatePlayerDto } from './dto/create-player.dto';
-import { UpdatePlayerDto } from './dto/update-player.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Player } from './entities/player.entity';
@@ -24,9 +23,7 @@ export class PlayerService {
       const players = await this.findAll();
       this.rankingService.initLadder(players);
     } catch (error) {
-      throw new NotFoundException(
-        'Impossible de récupérer les classements des joueurs',
-      );
+      throw new NotFoundException(error.message);
     }
   }
 
@@ -79,22 +76,8 @@ export class PlayerService {
   async findAll() {
     const players = await this.playerRepository.find();
     if (players.length === 0) {
-      throw new NotFoundException(
-        "Le classement n'est pas disponible car aucun joueur n'existe",
-      );
+      return [];
     }
     return players;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} player`;
-  }
-
-  update(id: number, updatePlayerDto: UpdatePlayerDto) {
-    return `This action updates a #${id} player`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} player`;
   }
 }

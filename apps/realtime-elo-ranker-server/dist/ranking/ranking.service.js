@@ -15,6 +15,7 @@ const event_emitter_1 = require("@nestjs/event-emitter");
 let RankingService = class RankingService {
     constructor(eventEmitter) {
         this.eventEmitter = eventEmitter;
+        this.ladder = [];
     }
     initLadder(players) {
         this.ladder = players
@@ -23,7 +24,7 @@ let RankingService = class RankingService {
             rank: player.rank,
         }))
             .sort((a, b) => b.rank - a.rank);
-        console.log('initLadder', this.ladder);
+        return this.ladder;
     }
     getLadder() {
         return this.ladder;

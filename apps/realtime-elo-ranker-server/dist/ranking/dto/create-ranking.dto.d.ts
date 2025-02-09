@@ -1,4 +1,4 @@
 export declare class CreateRankingDto {
-    readonly id: string;
-    readonly rank: number;
+    id: string;
+    rank: number;
 }

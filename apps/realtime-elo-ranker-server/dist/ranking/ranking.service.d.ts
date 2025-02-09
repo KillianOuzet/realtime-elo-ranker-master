@@ -5,14 +5,8 @@ export declare class RankingService {
     private eventEmitter;
     constructor(eventEmitter: EventEmitter2);
     private ladder;
-    initLadder(players: {
-        id: string;
-        rank: number;
-    }[]): void;
-    getLadder(): {
-        id: string;
-        rank: number;
-    }[];
+    initLadder(players: CreateRankingDto[]): CreateRankingDto[];
+    getLadder(): CreateRankingDto[];
     addPlayer(createRankingDto: CreateRankingDto): void;
     UpdatePlayerRank(updateRankingDto: UpdateRankingDto): void;
 }

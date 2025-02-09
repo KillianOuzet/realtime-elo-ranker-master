@@ -11,7 +11,8 @@
     "apps:server:dev": "pnpm run --filter ./apps/realtime-elo-ranker-server start:dev",
     "libs:ui:build": "pnpm run --filter ./libs/ui build",
     "libs:ui:test": "pnpm run --filter ./libs/ui test",
-    "docs:swagger:start": "pnpm run --filter ./docs/swagger start"
+    "docs:swagger:start": "pnpm run --filter ./docs/swagger start",
+    "test:e2e": "jest --config apps/realtime-elo-ranker-server/test/jest-e2e.json"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.2",

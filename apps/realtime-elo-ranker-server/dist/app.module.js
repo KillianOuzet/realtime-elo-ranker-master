@@ -8,13 +8,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const player_module_1 = require("./player/player.module");
-const typeorm_1 = require("@nestjs/typeorm");
-const player_entity_1 = require("./player/entities/player.entity");
 const match_module_1 = require("./match/match.module");
 const ranking_module_1 = require("./ranking/ranking.module");
+const player_entity_1 = require("./player/entities/player.entity");
+const test_config_1 = require("./config/test.config");
 const event_emitter_module_1 = require("@nestjs/event-emitter/dist/event-emitter.module");
 let AppModule = class AppModule {
 };
@@ -25,11 +26,18 @@ exports.AppModule = AppModule = __decorate([
             player_module_1.PlayerModule,
             match_module_1.MatchModule,
             ranking_module_1.RankingModule,
-            typeorm_1.TypeOrmModule.forRoot({
-                type: 'sqlite',
-                database: 'eloranker.sqlite',
-                entities: [player_entity_1.Player],
-                synchronize: true,
+            typeorm_1.TypeOrmModule.forRootAsync({
+                useFactory: () => {
+                    if (process.env.NODE_ENV === 'test') {
+                        return test_config_1.testConfig;
+                    }
+                    return {
+                        type: 'sqlite',
+                        database: 'eloranker.sqlite',
+                        entities: [player_entity_1.Player],
+                        synchronize: true,
+                    };
+                },
             }),
             event_emitter_module_1.EventEmitterModule.forRoot(),
         ],

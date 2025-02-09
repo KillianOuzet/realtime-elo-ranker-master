@@ -1,5 +1,9 @@
 import { PlayerService } from './../player/player.service';
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { PublishMatchDto } from './dto/publish-match.dto';
 
 @Injectable()
@@ -9,33 +13,43 @@ export class MatchService {
   async publishResults(publishMatchDto: PublishMatchDto) {
     const { winner: winnerId, loser: loserId, draw } = publishMatchDto;
 
-    const winner = await this.playerService.getPlayerById(winnerId);
-    const loser = await this.playerService.getPlayerById(loserId);
+    let winner, loser;
 
-    if (!winner || !loser) {
-      throw new UnprocessableEntityException("Un des joueurs n'existe pas");
+    try {
+      winner = await this.playerService.getPlayerById(winnerId);
+      loser = await this.playerService.getPlayerById(loserId);
+
+      if (!winner || !loser) {
+        throw new UnprocessableEntityException("Un des joueurs n'existe pas");
+      }
+
+      const { newWinnerRank, newLoserRank } = this.calculateElo(
+        winner.rank,
+        loser.rank,
+        draw,
+      );
+
+      const updatedWinner = await this.playerService.updatePlayerRank(
+        winner.id,
+        newWinnerRank,
+      );
+      const updatedLoser = await this.playerService.updatePlayerRank(
+        loser.id,
+        newLoserRank,
+      );
+
+      return {
+        winner: { id: updatedWinner.id, rank: updatedWinner.rank },
+        loser: { id: updatedLoser.id, rank: updatedLoser.rank },
+        draw: draw,
+      };
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw new UnprocessableEntityException("Un des joueurs n'existe pas");
+      } else {
+        throw error;
+      }
     }
-
-    const { newWinnerRank, newLoserRank } = this.calculateElo(
-      winner.rank,
-      loser.rank,
-      draw,
-    );
-
-    const updatedWinner = await this.playerService.updatePlayerRank(
-      winner.id,
-      newWinnerRank,
-    );
-    const updatedLoser = await this.playerService.updatePlayerRank(
-      loser.id,
-      newLoserRank,
-    );
-
-    return {
-      winner: { id: updatedWinner.id, rank: updatedWinner.rank },
-      loser: { id: updatedLoser.id, rank: updatedLoser.rank },
-      draw: draw,
-    };
   }
 
   /**

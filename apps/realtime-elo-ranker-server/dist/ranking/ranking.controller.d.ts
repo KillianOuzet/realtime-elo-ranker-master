@@ -3,11 +3,8 @@ import { Observable } from 'rxjs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 export declare class RankingController {
     private readonly rankingService;
-    private eventEmitter;
+    private readonly eventEmitter;
     constructor(rankingService: RankingService, eventEmitter: EventEmitter2);
     sse(): Observable<MessageEvent>;
-    findAll(): {
-        id: string;
-        rank: number;
-    }[];
+    findAll(): import("./dto/create-ranking.dto").CreateRankingDto[];
 }

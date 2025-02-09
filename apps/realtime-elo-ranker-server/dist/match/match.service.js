@@ -18,19 +18,30 @@ let MatchService = class MatchService {
     }
     async publishResults(publishMatchDto) {
         const { winner: winnerId, loser: loserId, draw } = publishMatchDto;
-        const winner = await this.playerService.getPlayerById(winnerId);
-        const loser = await this.playerService.getPlayerById(loserId);
-        if (!winner || !loser) {
-            throw new common_1.UnprocessableEntityException("Un des joueurs n'existe pas");
+        let winner, loser;
+        try {
+            winner = await this.playerService.getPlayerById(winnerId);
+            loser = await this.playerService.getPlayerById(loserId);
+            if (!winner || !loser) {
+                throw new common_1.UnprocessableEntityException("Un des joueurs n'existe pas");
+            }
+            const { newWinnerRank, newLoserRank } = this.calculateElo(winner.rank, loser.rank, draw);
+            const updatedWinner = await this.playerService.updatePlayerRank(winner.id, newWinnerRank);
+            const updatedLoser = await this.playerService.updatePlayerRank(loser.id, newLoserRank);
+            return {
+                winner: { id: updatedWinner.id, rank: updatedWinner.rank },
+                loser: { id: updatedLoser.id, rank: updatedLoser.rank },
+                draw: draw,
+            };
         }
-        const { newWinnerRank, newLoserRank } = this.calculateElo(winner.rank, loser.rank, draw);
-        const updatedWinner = await this.playerService.updatePlayerRank(winner.id, newWinnerRank);
-        const updatedLoser = await this.playerService.updatePlayerRank(loser.id, newLoserRank);
-        return {
-            winner: { id: updatedWinner.id, rank: updatedWinner.rank },
-            loser: { id: updatedLoser.id, rank: updatedLoser.rank },
-            draw: draw,
-        };
+        catch (error) {
+            if (error instanceof common_1.BadRequestException) {
+                throw new common_1.UnprocessableEntityException("Un des joueurs n'existe pas");
+            }
+            else {
+                throw error;
+            }
+        }
     }
     calculateElo(winnerRank, loserRank, draw = false) {
         const k = 32;
