@@ -15,10 +15,10 @@ interface MatchResult {
 }
 
 const genericPlayers: Player[] = [
-  { id: 'Player1', rank: 1200 },
-  { id: 'Player2', rank: 1100 },
-  { id: 'Player3', rank: 1300 },
-  { id: 'Player4', rank: 1250 },
+  { id: 'Killian', rank: 50 },
+  { id: 'Atow', rank: 100 },
+  { id: 'Vatira', rank: 150 },
+  { id: 'Caliste', rank: 200 },
 ];
 
 async function getPlayers(): Promise<Player[]> {
