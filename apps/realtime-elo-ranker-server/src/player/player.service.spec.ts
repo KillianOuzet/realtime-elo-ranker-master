@@ -80,10 +80,10 @@ describe('PlayerService', () => {
     expect(await service.findAll()).toBe(players);
   });
 
-  it('should throw not found exception if no players exist', async () => {
+  it('should return empty list if no players exist', async () => {
     jest.spyOn(repository, 'find').mockResolvedValue([]);
 
-    await expect(service.findAll()).rejects.toThrow(NotFoundException);
+    expect(await service.findAll()).toEqual([]);
   });
 
   it('should return a player by id', async () => {
