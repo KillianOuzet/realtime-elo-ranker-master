@@ -28,6 +28,10 @@
 
 Ce document présente mon travail réalisé sur le Tp Realtime Elo Ranker. Le projet consiste en une application web permettant de simuler des matchs entre des joueurs et de calculer et afficher leur classement Elo en temps réel. Le projet est composé de plusieurs applications et librairies, notamment le serveur `realtime-elo-ranker-server`, le client `realtime-elo-ranker-client`, et un simulateur de matchs `realtime-elo-ranker-simulator`.
 
+### lien du dépot git
+
+[https://github.com/KillianOuzet/realtime-elo-ranker-master](https://github.com/KillianOuzet/realtime-elo-ranker-master)
+
 ## Serveur - `realtime-elo-ranker-server`
 
 L'application serveur a été développée en utilisant NestJS, un framework Node.js pour construire des applications serveur. Le serveur gère le calcul des résultats de matchs et le classement des joueurs, et expose une API Web pour fournir les fonctionnalités métiers.
