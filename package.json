@@ -12,7 +12,6 @@
     "libs:ui:build": "pnpm run --filter ./libs/ui build",
     "libs:ui:test": "pnpm run --filter ./libs/ui test",
     "docs:swagger:start": "pnpm run --filter ./docs/swagger start",
-    "test:e2e": "jest --config apps/realtime-elo-ranker-server/test/jest-e2e.json",
     "simulate:matches": "ts-node apps/realtime-elo-ranker-simulator/src/simulator.ts"
   },
   "devDependencies": {
