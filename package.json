@@ -12,16 +12,19 @@
     "libs:ui:build": "pnpm run --filter ./libs/ui build",
     "libs:ui:test": "pnpm run --filter ./libs/ui test",
     "docs:swagger:start": "pnpm run --filter ./docs/swagger start",
-    "test:e2e": "jest --config apps/realtime-elo-ranker-server/test/jest-e2e.json"
+    "test:e2e": "jest --config apps/realtime-elo-ranker-server/test/jest-e2e.json",
+    "simulate:matches": "ts-node apps/realtime-elo-ranker-simulator/src/simulator.ts"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.2",
     "generate-react-cli": "^8.4.9",
     "motion": "^11.17.0",
     "next": "15.1.4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "ts-node": "^10.0.0"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "sqlite3": "^5.1.7"
   },
   "pnpm": {
