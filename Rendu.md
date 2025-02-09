@@ -20,8 +20,8 @@
   - [Prérequis](#prérequis)
   - [Lancement](#lancement)
     - [Lancer le Serveur](#lancer-le-serveur)
-    - [Lancer le Client](#lancer-le-client)
     - [Lancer le Swagger](#lancer-le-swagger)
+    - [Lancer le Client](#lancer-le-client)
     - [Lancer le script de simulation](#lancer-le-script-de-simulation)
 
 ## Introduction
@@ -139,7 +139,7 @@ pnpm install
 
 Tout d'abord, chaque commande est à lancer simplement à la racine du projet, pas besoin d'aller dans chaque application.
 
-Ensuite il faut suivre un ordre précis, toujours lancer le serveur avant le client !
+Ensuite il faut suivre un ordre précis, toujours lancer le serveur en premier et le client en dernier ! Donc si vous voulez lancer le swagger, faite le avant le client.
 
 #### Lancer le Serveur
 
@@ -149,20 +149,20 @@ Pour lancer le serveur, exécutez la commande suivante :
 pnpm run apps:server:dev
 ```
 
-#### Lancer le Client
-
-Pour lancer le client, exécutez la commande suivante :
-
-```bash
-pnpm run apps:client:dev
-```
-
 #### Lancer le Swagger
 
 Pour lancer le Swagger ( non requis pour le bon fonctionnement), exécutez la commande suivante :
 
 ```bash
 pnpm run docs:swagger:start
+```
+
+#### Lancer le Client
+
+Pour lancer le client, exécutez la commande suivante :
+
+```bash
+pnpm run apps:client:dev
 ```
 
 #### Lancer le script de simulation
