@@ -159,6 +159,12 @@ pnpm run docs:swagger:start
 
 #### Lancer le Client
 
+Ne pas oublier de générer les libs pour le client si ça n'a pas été fait au préalable :
+
+```bash
+pnpm run libs:ui:build
+```
+
 Pour lancer le client, exécutez la commande suivante :
 
 ```bash
